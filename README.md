@@ -1,6 +1,6 @@
 # keyball-keymap
 
-This repository is a yama's keymap for [keyball 39 🎱](https://github.com/Yowkees/keyball).
+This repository is yama's keymap for [keyball 39 🎱](https://github.com/Yowkees/keyball).
 
 ## 📝 日本語での記事
 
