@@ -16,6 +16,7 @@ enum custom_keycodes {
   KC_S_0,
   // S_TGML,
   LY_TGML,
+  LY_CTL_SPACE,
   ACMD_SP,
 };
 

@@ -31,6 +31,7 @@ SRC += libs/layer/layer.c
 SRC += libs/led_matrix/led_matrix.c
 # SRC += libs/shift_tgml/shift_tgml.c
 SRC += libs/ly_tgml/ly_tgml.c
+SRC += libs/ly_ctl_space/ly_ctl_space.c
 SRC += libs/acmd_sp/acmd_sp.c
 SRC += libs/oled/oled.c
 # SRC += libs/combo/combo.c

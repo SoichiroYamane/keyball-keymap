@@ -4,6 +4,7 @@
 // #include "leave_ml/leave_ml.h"
 #include "others/others.h"
 // #include "shift_tgml/shift_tgml.h"
+#include "ly_ctl_space/ly_ctl_space.h"
 #include "ly_tgml/ly_tgml.h"
 #include "tmux/tmux.h"
 
@@ -13,6 +14,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   process_acmd_sp(keycode, record);
   process_jp_toggle(keycode, record);
   process_ly_tgml(keycode, record);
+  process_ly_ctl_space(keycode, record);
   process_hm_tog(keycode, record);
   process_ent_imevim(keycode, record);
   process_alt_tab(keycode, record);
@@ -28,4 +30,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void matrix_scan_user(void) {
   matrix_scan_acmd_sp();
   matrix_scan_ly_tgml();
+  matrix_scan_ly_ctl_space();
 }
