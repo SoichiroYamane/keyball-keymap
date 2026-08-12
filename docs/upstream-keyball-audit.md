@@ -23,7 +23,7 @@ QMK 0.33.13 adaptations:
 | Path | Upstream reference | Decision and compatibility note |
 | --- | --- | --- |
 | `keyball/lib/keyball/keyball.c` | [`11802b6`](https://github.com/Yowkees/keyball/commit/11802b6a2a7c1091c5f7e754ce744978ccd4936) | Added the missing `OLED_ENABLE` guard around `pressing_keys_update()`. The existing local OLED guard for `LFSTR_*` was already equivalent. |
-| `keyball/lib/keyball/README.md` | upstream documentation fix | Linked the English and Japanese special-keycode sections. No firmware behavior changes. |
+| `keyball/lib/keyball/README.md` | [`c345c4f`](https://github.com/Yowkees/keyball/commit/c345c4f726874ec73243bde6fc6b91af4a76b40f) | Linked the English and Japanese special-keycode sections. No firmware behavior changes. |
 
 ## Deferred upstream changes
 
@@ -79,6 +79,6 @@ this PR. It also runs static checks and the existing CI security/build checks.
 No hardware flash, EEPROM reset, OS input-source change, tag, or Release is
 part of this audit.
 
-Rollback is the PR's revert commit. The preceding vendored baseline is
-`9e28232bf61881998a6f5e659f12147936cd75c0`; generated firmware is not tracked
-in this audit.
+Rollback is a normal revert of the commits in PR #9, restoring the preceding
+vendored baseline `9e28232bf61881998a6f5e659f12147936cd75c0`; generated
+firmware is not tracked in this audit.
