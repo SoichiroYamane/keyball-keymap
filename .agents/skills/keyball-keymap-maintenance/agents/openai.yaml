@@ -1,0 +1,4 @@
+interface:
+  display_name: "Keyball Keymap Maintenance"
+  short_description: "Maintain the public Keyball39 yama keymap safely"
+  default_prompt: "Use $keyball-keymap-maintenance to review and validate a Keyball39 yama keymap change."
