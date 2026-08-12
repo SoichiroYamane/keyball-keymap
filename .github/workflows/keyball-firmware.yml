@@ -1,0 +1,121 @@
+name: Build and release Keyball firmware
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+    paths:
+      - "keyball/**"
+      - ".github/workflows/keyball-firmware.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "keyball/**"
+      - ".github/workflows/keyball-firmware.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keyball-firmware-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Keyball39 yama and via
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    container:
+      # Same QMK CLI image digest used by the official Keyball workflow.
+      image: ghcr.io/qmk/qmk_cli@sha256:2dc05fc9f32efebd6b05c2b8676ee548358bc7e151e9dbf4dac6b6eed4513b07
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Checkout QMK 0.22.14
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: qmk/qmk_firmware
+          ref: 0.22.14
+          path: __qmk__
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Set up QMK source
+        shell: bash
+        run: |
+          qmk setup --home "$GITHUB_WORKSPACE/__qmk__" --yes
+          test ! -e "$GITHUB_WORKSPACE/__qmk__/keyboards/keyball"
+          ln -s "$GITHUB_WORKSPACE/keyball" "$GITHUB_WORKSPACE/__qmk__/keyboards/keyball"
+          test -f "$GITHUB_WORKSPACE/keyball/keyball39/keymaps/yama/keymap.c"
+
+      - name: Install QMK Python requirements
+        shell: bash
+        run: /usr/bin/python3 -m pip install --disable-pip-version-check -r __qmk__/requirements.txt
+
+      - name: Build Keyball39 yama
+        shell: bash
+        run: qmk compile -j 4 -kb keyball/keyball39 -km yama
+
+      - name: Build Keyball39 via baseline
+        shell: bash
+        run: qmk compile -j 4 -kb keyball/keyball39 -km via
+
+      - name: Create checksum
+        shell: bash
+        run: |
+          cd __qmk__
+          sha256sum keyball_keyball39_yama.hex > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: keyball39-firmware
+          path: |
+            __qmk__/keyball_keyball39_yama.hex
+            __qmk__/keyball_keyball39_via.hex
+            __qmk__/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish tagged firmware
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download firmware artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: keyball39-firmware
+          path: release-assets
+
+      - name: Verify checksum
+        working-directory: release-assets
+        run: sha256sum --check SHA256SUMS
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            release-assets/keyball_keyball39_yama.hex \
+            release-assets/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --generate-notes \
+            --title "Keyball39 yama $GITHUB_REF_NAME"
