@@ -61,6 +61,14 @@ jobs:
         shell: bash
         run: /usr/bin/python3 -m pip install --disable-pip-version-check -r __qmk__/requirements.txt
 
+      - name: Verify QMK revision and toolchain
+        shell: bash
+        run: |
+          test "$(git -C __qmk__ rev-parse HEAD)" = "332fa30e173e5b0ecc0c70ff166974b6db86525e"
+          echo "QMK 0.33.13 @ $(git -C __qmk__ rev-parse HEAD)"
+          qmk --version
+          avr-gcc --version | head -n 1
+
       - name: Build Keyball39 yama
         shell: bash
         run: qmk compile -j 4 -kb keyball/keyball39 -km yama
