@@ -39,11 +39,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Checkout QMK 0.22.14
+      - name: Checkout QMK 0.33.13
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: qmk/qmk_firmware
-          ref: 0.22.14
+          ref: 0.33.13
           path: __qmk__
           fetch-depth: 1
           submodules: recursive
@@ -56,10 +56,19 @@ jobs:
           test ! -e "$GITHUB_WORKSPACE/__qmk__/keyboards/keyball"
           ln -s "$GITHUB_WORKSPACE/keyball" "$GITHUB_WORKSPACE/__qmk__/keyboards/keyball"
           test -f "$GITHUB_WORKSPACE/keyball/keyball39/keymaps/yama/keymap.c"
+          grep -qx '#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT' "$GITHUB_WORKSPACE/keyball/keyball39/config.h"
 
       - name: Install QMK Python requirements
         shell: bash
         run: /usr/bin/python3 -m pip install --disable-pip-version-check -r __qmk__/requirements.txt
+
+      - name: Verify QMK revision and toolchain
+        shell: bash
+        run: |
+          test "$(git -C __qmk__ rev-parse HEAD)" = "332fa30e173e5b0ecc0c70ff166974b6db86525e"
+          echo "QMK 0.33.13 @ $(git -C __qmk__ rev-parse HEAD)"
+          qmk --version
+          avr-gcc --version | head -n 1
 
       - name: Build Keyball39 yama
         shell: bash

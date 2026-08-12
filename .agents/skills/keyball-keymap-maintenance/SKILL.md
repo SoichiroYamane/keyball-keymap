@@ -1,6 +1,6 @@
 ---
 name: keyball-keymap-maintenance
-description: Review and maintain this public Keyball39 yama QMK keymap repository, including custom key behavior, vendored Keyball sources, QMK 0.22.14 builds, CI artifacts, tag-based GitHub Releases, upstream comparison, and public Issue/PR evidence. Use when changing or validating files under keyball/, investigating language switching or tap/hold behavior, updating dist firmware, comparing with Yowkees/keyball, or editing GitHub Actions and release automation. Do not treat this skill as authorization to flash hardware, change OS input settings, publish a tag or Release, overwrite yama, or disclose local machine information.
+description: Review and maintain this public Keyball39 yama QMK keymap repository, including custom key behavior, vendored Keyball sources, QMK 0.33.13 builds, CI artifacts, tag-based GitHub Releases, upstream comparison, and public Issue/PR evidence. Use when changing or validating files under keyball/, investigating language switching or tap/hold behavior, updating dist firmware, comparing with Yowkees/keyball, or editing GitHub Actions and release automation. Do not treat this skill as authorization to flash hardware, change OS input settings, publish a tag or Release, overwrite yama, or disclose local machine information.
 ---
 
 # Keyball Keymap Maintenance
@@ -12,7 +12,7 @@ Read root `AGENTS.md` before acting. It defines the public-information boundary,
 - `keyball/keyball39/keymaps/yama/`: source of truth for the custom keymap.
 - `keyball/drivers/` and `keyball/lib/`: vendored pointing-device and shared Keyball behavior.
 - Other `keyball*/keymaps/{default,via,test}` paths: upstream baselines used for compatibility checks.
-- `.github/workflows/keyball-firmware.yml`: QMK 0.22.14 build, artifact, and tag Release automation.
+- `.github/workflows/keyball-firmware.yml`: QMK 0.33.13 build, artifact, and tag Release automation.
 - `dist/`: legacy tracked firmware snapshot; never hand-edit or treat it as proof of the current source build.
 
 ## Triage and inspection
@@ -60,7 +60,7 @@ Never publish credentials, machine paths, private input-source names, or persona
 
 ## CI and CD contract
 
-Keep QMK at `0.22.14` unless an Issue explicitly changes it. Pin GitHub Actions by commit SHA and the QMK CLI container by digest. Use read-only token permission for builds. Allow `contents: write` only in the tag Release job.
+Keep QMK at the fixed stable tag `0.33.13` unless an Issue explicitly changes it. Pin GitHub Actions by commit SHA and the QMK CLI container by digest. Use read-only token permission for builds. Allow `contents: write` only in the tag Release job.
 
 CI must build `keyball/keyball39:yama` and a `via` baseline, produce deterministic filenames, create `SHA256SUMS`, and upload artifacts. CD must run only for reviewed `v*` tags, download the artifact from the same workflow run, and attach the `yama` `.hex` plus checksum to a GitHub Release. It must never flash hardware or commit generated binaries.
 
@@ -70,7 +70,7 @@ Run static checks:
 
 ```console
 git diff --check
-python3 -m json.tool keyball/keyball39/info.json >/dev/null
+python3 -m json.tool keyball/keyball39/keyboard.json >/dev/null
 actionlint .github/workflows/keyball-firmware.yml
 ```
 

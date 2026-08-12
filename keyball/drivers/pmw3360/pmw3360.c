@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "quantum.h"
+#include "gpio.h"
 #include "pmw3360.h"
 
 // Include SROM definitions.
@@ -131,7 +132,7 @@ bool pmw3360_motion_burst(pmw3360_motion_t *d) {
 
 bool pmw3360_init(void) {
     spi_init();
-    setPinOutput(PMW3360_NCS_PIN);
+    gpio_set_pin_output(PMW3360_NCS_PIN);
     // reboot
     pmw3360_spi_start();
     pmw3360_reg_write(pmw3360_Power_Up_Reset, 0x5a);

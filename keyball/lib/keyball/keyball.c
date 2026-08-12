@@ -151,7 +151,7 @@ void keyboard_pre_init_kb(void) {
 }
 #endif
 
-void pointing_device_driver_init(void) {
+bool pointing_device_driver_init(void) {
 #if KEYBALL_MODEL != 46
   keyball.this_have_ball = pmw3360_init();
 #endif
@@ -167,6 +167,7 @@ void pointing_device_driver_init(void) {
 #endif
     pmw3360_cpi_set(CPI_DEFAULT - 1);
   }
+  return keyball.this_have_ball;
 }
 
 uint16_t pointing_device_driver_get_cpi(void) { return keyball_get_cpi(); }
@@ -323,8 +324,8 @@ static uint16_t get_auto_mouse_keep_time(void) {
 #endif
 }
 
-// override qmk function:
-//  https://github.com/qmk/qmk_firmware/blob/0.22.14/quantum/pointing_device/pointing_device_auto_mouse.c#L208-L221
+// Override QMK's weak auto_mouse_activation callback:
+//  https://github.com/qmk/qmk_firmware/blob/0.33.13/quantum/pointing_device/pointing_device_auto_mouse.c#L238-L244
 // activate auto mouse layer when mouse movement exceeds the threshold.
 bool auto_mouse_activation(report_mouse_t mouse_report) {
   keyball.total_mouse_movement += movement_size_of(&mouse_report);
@@ -767,9 +768,9 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
   switch (keycode) {
 #ifndef MOUSEKEY_ENABLE
-  // process KC_MS_BTN1~8 by myself
+  // process MS_BTN1~8 by myself
   // See process_action() in quantum/action.c for details.
-  case KC_MS_BTN1 ... KC_MS_BTN8: {
+  case MS_BTN1 ... MS_BTN8: {
     extern void register_mouse(uint8_t mouse_keycode, bool pressed);
     register_mouse(keycode, record->event.pressed);
     // to apply QK_MODS actions, allow to process others.

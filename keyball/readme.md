@@ -27,10 +27,10 @@ See each directories for each keyboards in a table above.
 2. Check out [qmk/qmk_firmware](https://github.com/qmk/qmk_firmware/) repository in another place.
 
     ```console
-    $ git clone https://github.com/qmk/qmk_firmware.git --depth 1 --recurse-submodules --shallow-submodules -b 0.22.14 qmk
+    $ git clone https://github.com/qmk/qmk_firmware.git --depth 1 --recurse-submodules --shallow-submodules -b 0.33.13 qmk
     ```
 
-    Currently Keyball firmwares are verified to compile with QMK 0.22.14
+    This checkout verifies the Keyball firmwares with QMK 0.33.13.
 
 3. Create a symbolic link to this `keyball/` directory from [qmk/qmk_firmware]'s `keyboards/` directory.
 
