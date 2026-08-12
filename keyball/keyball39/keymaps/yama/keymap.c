@@ -100,10 +100,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,      XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX
   ),
 
+  // OmniWM workspace, focus, and window-management shortcuts.
+  // The chords match modules/home/darwin/omniwm/keymap.nix in the nix repo.
   [7] = LAYOUT_universal(
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX,
-    XXXXXXX  ,LCMD(KC_Z),LCMD(KC_C),LCMD(KC_V),LCMD(KC_F),                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX,
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX,
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,      XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX
+    RGUI(KC_1), RGUI(KC_2), RGUI(KC_3), RGUI(KC_4), RGUI(KC_5),                  RGUI(KC_6), RGUI(KC_7), RGUI(KC_8), RGUI(KC_9), XXXXXXX,
+    XXXXXXX  , LCMD(KC_Z), LCMD(KC_C), LCMD(KC_V), LCMD(KC_F),                  RAG(KC_H),  RAG(KC_J),  RAG(KC_K),  RAG(KC_L),  XXXXXXX,
+    RSG(KC_1), RSG(KC_2), RSG(KC_3), RSG(KC_4), RSG(KC_5),                      RSG(KC_6), RSG(KC_7), RSG(KC_8), RSG(KC_9), XXXXXXX,
+    RGUI(KC_F), XXXXXXX  , XXXXXXX  , MO(8)    , MO(9)    , MO(10)    ,        XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX
+  ),
+
+  // Temporary sublayers for the three layer-7 mode keys.  Transparent keys
+  // keep layer-7 workspace/focus shortcuts available while a mode is held.
+  [8] = LAYOUT_universal(
+    _______, _______, _______, _______, _______,                              _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______,                              RGUI(KC_H), _______, _______, RGUI(KC_L), _______,
+    _______, _______, _______, _______, _______,                              _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______
+  ),
+
+  [9] = LAYOUT_universal(
+    _______, _______, _______, _______, _______,                              _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______,                              RSG(KC_H),  _______, _______, RSG(KC_L),  _______,
+    _______, _______, _______, _______, _______,                              _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______
+  ),
+
+  [10] = LAYOUT_universal(
+    _______, _______, _______, _______, _______,                              _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______,                              RCG(KC_H),  _______, _______, RCG(KC_L),  _______,
+    _______, _______, _______, _______, _______,                              _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______
   ),
 };
