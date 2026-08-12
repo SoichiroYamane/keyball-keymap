@@ -49,6 +49,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // at its existing value because VIA/DYNAMIC_KEYMAP is disabled for yama.
 #undef LAYER_STATE_8BIT
 #define LAYER_STATE_16BIT
+// No OSM/OSL keycodes are used; omit the unused one-shot implementation to
+// keep the ATmega32U4 image within the CI toolchain's capacity limit.
+#define NO_ACTION_ONESHOT
 #define DYNAMIC_KEYMAP_LAYER_COUNT 7
 
 // ╭─────────────────────────────────────────────────────────╮
