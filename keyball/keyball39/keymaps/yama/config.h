@@ -45,6 +45,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KEYBALL_SCROLL_DIV_DEFAULT 5
 // https://github.com/Yowkees/keyball/blob/9ffe9f6c9416f9428a49bc69235a35d2d5e1fb30/qmk_firmware/keyboards/keyball/lib/keyball/README.md
 #define KEYBALL_SCROLLSNAP_ENABLE 0
+// Eleven static layers require a 16-bit layer state; the dynamic count stays
+// at its existing value because VIA/DYNAMIC_KEYMAP is disabled for yama.
+#undef LAYER_STATE_8BIT
+#define LAYER_STATE_16BIT
+// No OSM/OSL keycodes are used; omit the unused one-shot implementation to
+// keep the ATmega32U4 image within the CI toolchain's capacity limit.
+#define NO_ACTION_ONESHOT
 #define DYNAMIC_KEYMAP_LAYER_COUNT 7
 
 // ╭─────────────────────────────────────────────────────────╮
