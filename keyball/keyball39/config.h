@@ -30,6 +30,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Split parameters
 #define SOFT_SERIAL_PIN         D2
 #define SPLIT_HAND_MATRIX_GRID  F6, B5
+// QMK 0.33 changed the default polarity of SPLIT_HAND_MATRIX_GRID.  Keyball39
+// was authored against the pre-0.33 polarity, so preserve the physical left /
+// right orientation (and the corresponding pointing-device transform).
+#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT
 #define SPLIT_USB_DETECT
 #ifdef OLED_ENABLE
 #    define SPLIT_OLED_ENABLE

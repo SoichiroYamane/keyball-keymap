@@ -56,6 +56,7 @@ jobs:
           test ! -e "$GITHUB_WORKSPACE/__qmk__/keyboards/keyball"
           ln -s "$GITHUB_WORKSPACE/keyball" "$GITHUB_WORKSPACE/__qmk__/keyboards/keyball"
           test -f "$GITHUB_WORKSPACE/keyball/keyball39/keymaps/yama/keymap.c"
+          grep -qx '#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT' "$GITHUB_WORKSPACE/keyball/keyball39/config.h"
 
       - name: Install QMK Python requirements
         shell: bash
