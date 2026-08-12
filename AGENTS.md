@@ -29,7 +29,7 @@ Repository固有作業では`.agents/skills/keyball-keymap-maintenance/SKILL.md`
 
 ## Language-switch behavior
 
-- base layer右下は`LY_CTL_SPACE`です。短押しは現在release時に`Ctrl+Space`、長押しはlayer 4です。
+- base layer右下は`LY_CTL_SPACE`です。押下時間に関係なくrelease時に`Ctrl+Space`を送ります。layer 4への長押し遷移はありません。
 - layer 3の`JP_TOGGLE`はpress時に`KC_LNG1`、release時に`KC_LNG2`を送ります。`ENT_IMEVIM`はfirmware内の言語状態を参照します。
 - 短押しでも切り替わらない実機症状があるため、100 ms境界だけを原因と断定しません。press/release timing、roll、modifier残留、OS shortcut受理、firmwareとOSの状態ずれを分けて検証します。
 - compile成功だけで操作性が確認できたと報告しません。短押し、長押し、roll、連打、英→日、日→英を実機で確認します。
