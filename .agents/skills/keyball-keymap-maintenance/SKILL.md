@@ -70,7 +70,7 @@ Run static checks:
 
 ```console
 git diff --check
-python3 -m json.tool keyball/keyball39/info.json >/dev/null
+python3 -m json.tool keyball/keyball39/keyboard.json >/dev/null
 actionlint .github/workflows/keyball-firmware.yml
 ```
 
