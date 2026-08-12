@@ -712,6 +712,7 @@ void housekeeping_task_kb(void) {
 #endif
 
 static void pressing_keys_update(uint16_t keycode, keyrecord_t *record) {
+#ifdef OLED_ENABLE
   // Process only valid keycodes.
   if (keycode >= 4 && keycode < 57) {
     char value = pgm_read_byte(code_to_name + keycode - 4);
@@ -729,6 +730,7 @@ static void pressing_keys_update(uint16_t keycode, keyrecord_t *record) {
       }
     }
   }
+#endif
 }
 
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
