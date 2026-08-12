@@ -13,6 +13,6 @@ This repository is yama's keymap for [keyball 39 🎱](https://github.com/Yowkee
 
 ## Firmware
 
-GitHub Actions builds the `yama` keymap and a `via` baseline with QMK 0.22.14. Each successful run provides `.hex` files and `SHA256SUMS` as a downloadable artifact.
+GitHub Actions builds the `yama` keymap and a `via` baseline with QMK 0.33.13. Each successful run provides `.hex` files and `SHA256SUMS` as a downloadable artifact.
 
 Pushing a reviewed `v*` tag creates a GitHub Release containing the `yama` firmware and its checksum. The workflow only builds and publishes files; it does not flash a keyboard.

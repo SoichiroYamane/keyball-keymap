@@ -39,11 +39,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Checkout QMK 0.22.14
+      - name: Checkout QMK 0.33.13
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: qmk/qmk_firmware
-          ref: 0.22.14
+          ref: 0.33.13
           path: __qmk__
           fetch-depth: 1
           submodules: recursive

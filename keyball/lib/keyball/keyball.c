@@ -323,8 +323,8 @@ static uint16_t get_auto_mouse_keep_time(void) {
 #endif
 }
 
-// override qmk function:
-//  https://github.com/qmk/qmk_firmware/blob/0.22.14/quantum/pointing_device/pointing_device_auto_mouse.c#L208-L221
+// Override QMK's weak auto_mouse_activation callback:
+//  https://github.com/qmk/qmk_firmware/blob/0.33.13/quantum/pointing_device/pointing_device_auto_mouse.c#L238-L244
 // activate auto mouse layer when mouse movement exceeds the threshold.
 bool auto_mouse_activation(report_mouse_t mouse_report) {
   keyball.total_mouse_movement += movement_size_of(&mouse_report);
