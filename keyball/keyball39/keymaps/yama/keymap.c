@@ -78,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    S(C(KC_G)),TMUX_SHELL,TMUX_CPMOD,TMUX_OPWIN, XXXXXXX  ,                            KC_MCTL  ,A(S(KC_R)), A(KC_D)  , A(KC_T)  , KC_LPAD  ,
    S(KC_LALT), XXXXXXX  , XXXXXXX  , KC_LSFT  , TMUX_SPH ,                            KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT  , ENT_IMEVIM,
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , TMUX_SPV ,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
-    DT_PRNT  , DT_DOWN  , DT_UP    , XXXXXXX  , XXXXXXX  , KC_BSPC  ,      XXXXXXX  , JP_TOGGLE, _______  , _______  , _______  , KC_MPLY
+    DT_PRNT  , DT_DOWN  , DT_UP    , XXXXXXX  , XXXXXXX  , KC_BSPC  ,      KC_LSFT  , JP_TOGGLE, _______  , _______  , _______  , KC_MPLY
   ),
 
   // Mouse Layer
