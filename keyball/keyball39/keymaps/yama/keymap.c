@@ -91,9 +91,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Mouse Layer
   [5] = LAYOUT_universal(
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            KC_MCTL  , XXXXXXX  , KC_BTN3  , XXXXXXX  , XXXXXXX,
-    KC_LSFT  ,LCMD(KC_Z),LCMD(KC_C),LCMD(KC_V),LCMD(KC_F),                            XXXXXXX  , KC_BTN1  , KC_BTN2  , MO(6)    , KC_ENT ,
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            XXXXXXX  , KC_BTN4  , KC_BTN5  , XXXXXXX  , XXXXXXX,
+    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            KC_MCTL  , XXXXXXX  , MS_BTN3  , XXXXXXX  , XXXXXXX,
+    KC_LSFT  ,LCMD(KC_Z),LCMD(KC_C),LCMD(KC_V),LCMD(KC_F),                            XXXXXXX  , MS_BTN1  , MS_BTN2  , MO(6)    , KC_ENT ,
+    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            XXXXXXX  , MS_BTN4  , MS_BTN5  , XXXXXXX  , XXXXXXX,
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,      XXXXXXX  , TG(5)    , XXXXXXX  , XXXXXXX  , XXXXXXX  , KC_CAPS
   ),
 
@@ -112,4 +112,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,      XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX
   ),
 };
-
