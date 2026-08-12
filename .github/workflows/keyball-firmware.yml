@@ -89,8 +89,12 @@ jobs:
             keyball_keyball39_via.hex
           )
           printf '%s\n' "${expected_hex[@]}" | sort > expected-hex-files
-          find . \( -type f -o -type l \) -name '*.hex' -print \
-            | sed 's#^\./##' | sort > actual-hex-files
+          : > actual-hex-files
+          for hex_file in ./*.hex; do
+            [[ -f "$hex_file" || -L "$hex_file" ]] || continue
+            printf '%s\n' "${hex_file#./}" >> actual-hex-files
+          done
+          sort -o actual-hex-files actual-hex-files
           diff -u expected-hex-files actual-hex-files
 
           sha256sum "${expected_hex[@]}" > SHA256SUMS
@@ -141,8 +145,12 @@ jobs:
             keyball_keyball39_via.hex
           )
           printf '%s\n' "${expected_hex[@]}" | sort > expected-hex-files
-          find . \( -type f -o -type l \) -name '*.hex' -print \
-            | sed 's#^\./##' | sort > actual-hex-files
+          : > actual-hex-files
+          for hex_file in ./*.hex; do
+            [[ -f "$hex_file" || -L "$hex_file" ]] || continue
+            printf '%s\n' "${hex_file#./}" >> actual-hex-files
+          done
+          sort -o actual-hex-files actual-hex-files
           diff -u expected-hex-files actual-hex-files
 
           printf '%s\n' "${expected_hex[@]}" | sort > expected-manifest-files
