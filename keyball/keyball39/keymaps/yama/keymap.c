@@ -81,14 +81,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     DT_PRNT  , DT_DOWN  , DT_UP    , XXXXXXX  , XXXXXXX  , KC_BSPC  ,      XXXXXXX  , JP_TOGGLE, _______  , _______  , _______  , KC_MPLY
   ),
 
-  [4] = LAYOUT_universal(
-    AML_TO   , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
-    XXXXXXX  , XXXXXXX  , XXXXXXX  ,LCMD(C(KC_S)),XXXXXXX,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
-    XXXXXXX  ,LCMD(KC_MINS),LCMD(KC_EQL),KC_VOLD,KC_VOLU ,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
-    HM_TOG   , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,      XXXXXXX  , XXXXXXX  , _______  , _______  , _______  , XXXXXXX
-  ),
-
-
   // Mouse Layer
   [5] = LAYOUT_universal(
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            KC_MCTL  , XXXXXXX  , MS_BTN3  , XXXXXXX  , XXXXXXX,

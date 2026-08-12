@@ -21,11 +21,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
   //   rgb_matrix_sethsv_noeeprom(85, 255, 128); // GREEN
   //   break;
   //
-  case 4:
-    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(191, 255, 128); // PURPLE
-    break;
-
   // mouse layer
   case 5:
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
