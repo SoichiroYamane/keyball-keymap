@@ -77,15 +77,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [3] = LAYOUT_universal(
    S(C(KC_G)),TMUX_SHELL,TMUX_CPMOD,TMUX_OPWIN, XXXXXXX  ,                            KC_MCTL  ,A(S(KC_R)), A(KC_D)  , A(KC_T)  , KC_LPAD  ,
    S(KC_LALT), XXXXXXX  , XXXXXXX  , KC_LSFT  , TMUX_SPH ,                            KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT  , ENT_IMEVIM,
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , TMUX_SPV ,                            XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
+    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , TMUX_SPV ,                            KC_F20   , KC_F19   , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
     DT_PRNT  , DT_DOWN  , DT_UP    , XXXXXXX  , XXXXXXX  , KC_BSPC  ,      KC_LSFT  , JP_TOGGLE, _______  , _______  , _______  , KC_MPLY
   ),
+
+  // F19/F20 are semantic formatting events consumed by macOS Karabiner.
+  // Keep physical N/M consistent between layer 3 and layer 5.
 
   // Mouse Layer
   [5] = LAYOUT_universal(
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            KC_MCTL  , XXXXXXX  , MS_BTN3  , XXXXXXX  , XXXXXXX,
     KC_LSFT  ,LCMD(KC_Z),LCMD(KC_C),LCMD(KC_V),LCMD(KC_F),                            XXXXXXX  , MS_BTN1  , MS_BTN2  , MO(6)    , KC_ENT ,
-    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            XXXXXXX  , MS_BTN4  , MS_BTN5  , XXXXXXX  , XXXXXXX,
+    XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,                            KC_F20   , KC_F19   , MS_BTN5  , XXXXXXX  , XXXXXXX,
     XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,      XXXXXXX  , TG(5)    , XXXXXXX  , XXXXXXX  , XXXXXXX  , KC_CAPS
   ),
 
