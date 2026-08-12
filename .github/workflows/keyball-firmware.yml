@@ -78,11 +78,32 @@ jobs:
         shell: bash
         run: qmk compile -j 4 -kb keyball/keyball39 -km via
 
-      - name: Create checksum
+      - name: Create and verify artifact checksums
         shell: bash
         run: |
+          set -euo pipefail
           cd __qmk__
-          sha256sum keyball_keyball39_yama.hex > SHA256SUMS
+
+          expected_hex=(
+            keyball_keyball39_yama.hex
+            keyball_keyball39_via.hex
+          )
+          printf '%s\n' "${expected_hex[@]}" | sort > expected-hex-files
+          : > actual-hex-files
+          for hex_file in ./*.hex; do
+            [[ -f "$hex_file" || -L "$hex_file" ]] || continue
+            printf '%s\n' "${hex_file#./}" >> actual-hex-files
+          done
+          sort -o actual-hex-files actual-hex-files
+          diff -u expected-hex-files actual-hex-files
+
+          sha256sum "${expected_hex[@]}" > SHA256SUMS
+          printf '%s\n' "${expected_hex[@]}" | sort > expected-manifest-files
+          awk 'NF == 2 { print $2 }' SHA256SUMS | sort > actual-manifest-files
+          diff -u expected-manifest-files actual-manifest-files
+          sha256sum --strict --check SHA256SUMS
+
+          rm expected-hex-files actual-hex-files expected-manifest-files actual-manifest-files
           cat SHA256SUMS
 
       - name: Upload firmware artifact
@@ -113,9 +134,40 @@ jobs:
           name: keyball39-firmware
           path: release-assets
 
-      - name: Verify checksum
+      - name: Verify artifact contents and checksums
         working-directory: release-assets
-        run: sha256sum --check SHA256SUMS
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          expected_hex=(
+            keyball_keyball39_yama.hex
+            keyball_keyball39_via.hex
+          )
+          printf '%s\n' "${expected_hex[@]}" | sort > expected-hex-files
+          : > actual-hex-files
+          for hex_file in ./*.hex; do
+            [[ -f "$hex_file" || -L "$hex_file" ]] || continue
+            printf '%s\n' "${hex_file#./}" >> actual-hex-files
+          done
+          sort -o actual-hex-files actual-hex-files
+          diff -u expected-hex-files actual-hex-files
+
+          printf '%s\n' "${expected_hex[@]}" | sort > expected-manifest-files
+          awk 'NF == 2 { print $2 }' SHA256SUMS | sort > actual-manifest-files
+          diff -u expected-manifest-files actual-manifest-files
+          sha256sum --strict --check SHA256SUMS
+
+          rm expected-hex-files actual-hex-files expected-manifest-files actual-manifest-files
+
+      - name: Create release checksum
+        working-directory: release-assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp SHA256SUMS SHA256SUMS.artifact
+          sha256sum keyball_keyball39_yama.hex > SHA256SUMS
+          sha256sum --strict --check SHA256SUMS
 
       - name: Create GitHub Release
         env:
