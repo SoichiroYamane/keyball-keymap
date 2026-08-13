@@ -39,6 +39,24 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     rgb_matrix_sethsv_noeeprom(85, 255, 128); // GREEN
     break;
 
+  // OmniWM temporary window-move layer
+  case 8:
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(21, 255, 128); // ORANGE
+    break;
+
+  // OmniWM temporary window-to-workspace layer
+  case 9:
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(170, 255, 128); // BLUE
+    break;
+
+  // OmniWM temporary workspace-switch layer
+  case 10:
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(213, 255, 128); // MAGENTA
+    break;
+
   default:
     rgb_matrix_reload_from_eeprom();
     break;
