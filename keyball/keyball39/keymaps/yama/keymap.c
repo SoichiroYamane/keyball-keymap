@@ -104,7 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // The chords match modules/home/darwin/omniwm/keymap.nix in the nix repo.
   [7] = LAYOUT_universal(
     RGUI(KC_1), RGUI(KC_2), RGUI(KC_3), RGUI(KC_4), RGUI(KC_5),                  RGUI(KC_6), RGUI(KC_7), RGUI(KC_8), RGUI(KC_9), XXXXXXX,
-    XXXXXXX  , LCMD(KC_Z), LCMD(KC_C), LCMD(KC_V), LCMD(KC_F),                  RAG(KC_H),  RAG(KC_J),  RAG(KC_K),  RAG(KC_L),  XXXXXXX,
+    XXXXXXX  , LCMD(KC_Z), LCMD(KC_C), LCMD(KC_V), LALT(LSFT(LCMD(KC_V))),          RAG(KC_H),  RAG(KC_J),  RAG(KC_K),  RAG(KC_L),  XXXXXXX,
     RSG(KC_1), RSG(KC_2), RSG(KC_3), RSG(KC_4), RSG(KC_5),                      RSG(KC_6), RSG(KC_7), RSG(KC_8), RSG(KC_9), XXXXXXX,
     RGUI(KC_F), XXXXXXX  , XXXXXXX  , MO(8)    , MO(9)    , MO(10)    ,        XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX
   ),
