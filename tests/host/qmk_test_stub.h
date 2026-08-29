@@ -14,6 +14,7 @@
 #define KC_TAB 0x2bu
 #define KC_ENT 0x28u
 #define KC_SPC 0x2cu
+#define KC_LCTL 0xe0u
 #define KC_LSFT 0xe1u
 #define KC_LALT 0xe2u
 #define KC_LCMD 0xe3u
@@ -26,7 +27,7 @@
 #define S(keycode) (0x3000u | (keycode))
 
 #define MOD_BIT(keycode) \
-    ((keycode) == KC_LALT ? 0x04u : ((keycode) == KC_LGUI ? 0x08u : 0u))
+    ((keycode) == KC_LCTL ? 0x01u : ((keycode) == KC_LALT ? 0x04u : ((keycode) == KC_LGUI ? 0x08u : 0u)))
 
 #define GET_TAPPING_TERM(keycode, record) (g_tapping_term)
 
