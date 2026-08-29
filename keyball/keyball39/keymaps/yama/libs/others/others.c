@@ -14,7 +14,7 @@ static inline void tap_code_combination(uint16_t mod, uint16_t key,
 void process_ent_imevim(uint16_t keycode, keyrecord_t *record) {
   if (keycode == ENT_IMEVIM) {
     if (record->event.pressed) {
-      tap_code_combination(KC_ENT, C(KC_Y), is_lang1_active());
+      tap_code_combination(KC_ENT, C(KC_Y), is_jp_toggle_held());
     }
   }
 }
@@ -22,9 +22,10 @@ void process_ent_imevim(uint16_t keycode, keyrecord_t *record) {
 void process_alt_tab(uint16_t keycode, keyrecord_t *record) {
   if (keycode == ALT_TAB) {
     if (record->event.pressed) {
-      register_code(KC_LALT);
-      tap_code16_delay(KC_TAB, 50);
-      unregister_code(KC_LALT);
+      // Use weak Alt so an independently held Alt remains held. Send the
+      // reports immediately; this shortcut must not block matrix scanning.
+      register_code16(A(KC_TAB));
+      unregister_code16(A(KC_TAB));
     }
   }
 }
@@ -32,9 +33,7 @@ void process_alt_tab(uint16_t keycode, keyrecord_t *record) {
 void process_kc_s_0(uint16_t keycode, keyrecord_t *record) {
   if (keycode == KC_S_0) {
     if (record->event.pressed) {
-      register_code(KC_LSFT);
-      tap_code(KC_0);
-      unregister_code(KC_LSFT);
+      tap_code16(S(KC_0));
     }
   }
 }

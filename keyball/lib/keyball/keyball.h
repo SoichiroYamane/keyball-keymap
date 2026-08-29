@@ -24,6 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define KEYBALL_CPI_DEFAULT 500
 #endif
 
+#if KEYBALL_CPI_DEFAULT < 100 || KEYBALL_CPI_DEFAULT % 100 != 0
+#    error KEYBALL_CPI_DEFAULT must be a positive multiple of 100
+#endif
+
 #ifndef KEYBALL_SCROLL_DIV_DEFAULT
 #    define KEYBALL_SCROLL_DIV_DEFAULT 4 // 4: 1/8 (1/2^(n-1))
 #endif
@@ -126,7 +130,9 @@ typedef union {
         uint8_t sdiv : 3;  // scroll divider
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
         uint8_t amle : 1;  // automatic mouse layer enabled
-        uint16_t amlto : 5; // automatic mouse layer timeout
+        // Low bits; auto_mouse_config.h stores the upper bits in reserved raw
+        // space so the existing CPI/scroll-snap layout remains compatible.
+        uint16_t amlto : 5; // automatic mouse layer timeout, low bits
 #endif
 #if KEYBALL_SCROLLSNAP_ENABLE == 2
         uint8_t ssnap : 2; // scroll snap mode
@@ -260,19 +266,19 @@ uint8_t keyball_get_scroll_div(void);
 void keyball_set_scroll_div(uint8_t div);
 
 /// keyball_get_cpi gets current CPI of trackball.
-/// The actual CPI value is the returned value +1 and multiplied by 100:
+/// The actual CPI value is the returned value multiplied by 100:
 ///
-///     CPI = (v + 1) * 100
+///     CPI = v * 100
 uint8_t keyball_get_cpi(void);
 
 /// keyball_set_cpi changes CPI of trackball.
-/// Valid values are between 0 to 119, and the actual CPI value is the set
-/// value +1 and multiplied by 100:
+/// Valid values are between 0 and 120. If it is 0, KEYBALL_CPI_DEFAULT will
+/// be used; otherwise the actual CPI value is the set value multiplied by 100:
 ///
-///     CPI = (v + 1) * 100
+///     CPI = v * 100
 ///
 /// In addition, if you do not upload SROM, the maximum value will be limited
-/// to 34 (3500CPI).
+/// to 35 (3500CPI).
 void keyball_set_cpi(uint8_t cpi);
 
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE

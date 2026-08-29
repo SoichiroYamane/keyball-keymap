@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "drivers/pmw3360/pmw3360.h"
 #include "keyball.h"
+#include "mouse_speed.h"
+#include "auto_mouse_config.h"
 
 #include <string.h>
 
@@ -31,7 +33,15 @@ const uint8_t SCROLL_DIV_MAX = 7;
 
 const uint16_t AML_TIMEOUT_MIN = 100;
 const uint16_t AML_TIMEOUT_MAX = 1000;
-const uint16_t AML_TIMEOUT_QU = 50; // Quantization Unit
+const uint16_t AML_TIMEOUT_QU = KEYBALL_AUTO_MOUSE_TIMEOUT_QUANTUM;
+
+#if KEYBALL_SCROLLSNAP_ENABLE == 2
+#define KEYBALL_AUTO_MOUSE_TIMEOUT_HIGH_SHIFT \
+  KEYBALL_AUTO_MOUSE_TIMEOUT_HIGH_SHIFT_WITH_SCROLLSNAP
+#else
+#define KEYBALL_AUTO_MOUSE_TIMEOUT_HIGH_SHIFT \
+  KEYBALL_AUTO_MOUSE_TIMEOUT_HIGH_SHIFT_WITHOUT_SCROLLSNAP
+#endif
 
 const uint16_t AML_ACTIVATE_THRESHOLD = 50;
 
@@ -137,10 +147,6 @@ static void add_scroll_div(int8_t delta) {
   keyball_set_scroll_div(v < 1 ? 1 : v);
 }
 
-static uint16_t movement_size_of(report_mouse_t *rep) {
-  return abs(rep->x) + abs(rep->y);
-}
-
 //////////////////////////////////////////////////////////////////////////////
 // Pointing device driver
 
@@ -174,30 +180,6 @@ uint16_t pointing_device_driver_get_cpi(void) { return keyball_get_cpi(); }
 
 void pointing_device_driver_set_cpi(uint16_t cpi) { keyball_set_cpi(cpi); }
 
-static void adjust_mouse_speed(report_mouse_t *r) {
-  uint16_t movement_size = movement_size_of(r);
-
-  float speed_factor = 1.0;
-  if (movement_size > 60) {
-    speed_factor = 3.0;
-  } else if (movement_size > 30) {
-    speed_factor = 1.5;
-  } else if (movement_size > 5) {
-    speed_factor = 1.0;
-  } else if (movement_size > 4) {
-    speed_factor = 0.9;
-  } else if (movement_size > 3) {
-    speed_factor = 0.7;
-  } else if (movement_size > 2) {
-    speed_factor = 0.5;
-  } else if (movement_size > 1) {
-    speed_factor = 0.2;
-  }
-
-  r->x = clip2int8(r->x * speed_factor);
-  r->y = clip2int8(r->y * speed_factor);
-}
-
 __attribute__((weak)) void
 keyball_on_apply_motion_to_mouse_move(keyball_motion_t *m, report_mouse_t *r,
                                       bool is_left) {
@@ -215,7 +197,7 @@ keyball_on_apply_motion_to_mouse_move(keyball_motion_t *m, report_mouse_t *r,
 #else
 #error("unknown Keyball model")
 #endif
-  adjust_mouse_speed(r);
+  keyball_mouse_speed_apply(r);
   // clear motion
   m->x = 0;
   m->y = 0;
@@ -313,12 +295,12 @@ static uint16_t keyball_get_auto_mouse_timeout(void) {
 }
 
 static void keyball_set_auto_mouse_timeout(uint16_t timeout) {
-  keyball.auto_mouse_layer_timeout = timeout;
+  keyball.auto_mouse_layer_timeout = keyball_auto_mouse_timeout_clamp(timeout);
 }
 
 static uint16_t get_auto_mouse_keep_time(void) {
 #ifdef AUTO_MOUSE_LAYER_KEEP_TIME
-  return AUTO_MOUSE_LAYER_KEEP_TIME;
+  return keyball_auto_mouse_timeout_clamp(AUTO_MOUSE_LAYER_KEEP_TIME);
 #else
   return keyball_get_auto_mouse_timeout();
 #endif
@@ -328,7 +310,7 @@ static uint16_t get_auto_mouse_keep_time(void) {
 //  https://github.com/qmk/qmk_firmware/blob/0.33.13/quantum/pointing_device/pointing_device_auto_mouse.c#L238-L244
 // activate auto mouse layer when mouse movement exceeds the threshold.
 bool auto_mouse_activation(report_mouse_t mouse_report) {
-  keyball.total_mouse_movement += movement_size_of(&mouse_report);
+  keyball.total_mouse_movement += keyball_mouse_movement_size(&mouse_report);
   if (AML_ACTIVATE_THRESHOLD < keyball.total_mouse_movement) {
     keyball.total_mouse_movement = 0;
     if (get_auto_mouse_timeout() != get_auto_mouse_keep_time()) {
@@ -688,7 +670,9 @@ void keyboard_post_init_kb(void) {
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
     set_auto_mouse_enable(c.amle);
     keyball_set_auto_mouse_timeout(
-        c.amlto == 0 ? AUTO_MOUSE_TIME : (c.amlto + 1) * AML_TIMEOUT_QU);
+        keyball_auto_mouse_timeout_from_raw(
+            c.raw, get_auto_mouse_keep_time(),
+            KEYBALL_AUTO_MOUSE_TIMEOUT_HIGH_SHIFT));
 #endif
 #if KEYBALL_SCROLLSNAP_ENABLE == 2
     keyball_set_scrollsnap_mode(c.ssnap);
@@ -804,12 +788,16 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
           .sdiv = keyball.scroll_div,
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
           .amle = get_auto_mouse_enable(),
-          .amlto = (keyball_get_auto_mouse_timeout() / AML_TIMEOUT_QU) - 1,
 #endif
 #if KEYBALL_SCROLLSNAP_ENABLE == 2
           .ssnap = keyball_get_scrollsnap_mode(),
 #endif
       };
+#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+      c.raw = keyball_auto_mouse_timeout_set_raw(
+          c.raw, keyball_get_auto_mouse_timeout(),
+          KEYBALL_AUTO_MOUSE_TIMEOUT_HIGH_SHIFT);
+#endif
       eeconfig_update_kb(c.raw);
     } break;
 
@@ -853,12 +841,16 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
       set_auto_mouse_enable(!get_auto_mouse_enable());
       break;
     case AML_I50: {
-      uint16_t v = keyball_get_auto_mouse_timeout() + 50;
-      keyball_set_auto_mouse_timeout(MIN(v, AML_TIMEOUT_MAX));
+      uint16_t v = keyball_get_auto_mouse_timeout();
+      keyball_set_auto_mouse_timeout(
+          v >= AML_TIMEOUT_MAX - AML_TIMEOUT_QU ? AML_TIMEOUT_MAX
+                                                : v + AML_TIMEOUT_QU);
     } break;
     case AML_D50: {
-      uint16_t v = keyball_get_auto_mouse_timeout() - 50;
-      keyball_set_auto_mouse_timeout(MAX(v, AML_TIMEOUT_MIN));
+      uint16_t v = keyball_get_auto_mouse_timeout();
+      keyball_set_auto_mouse_timeout(
+          v <= AML_TIMEOUT_MIN + AML_TIMEOUT_QU ? AML_TIMEOUT_MIN
+                                                : v - AML_TIMEOUT_QU);
     } break;
 #endif
 
