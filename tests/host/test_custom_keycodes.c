@@ -85,7 +85,7 @@ void matrix_scan_user(void) {
     matrix_scan_ly_ctl_space();
 }
 
-static void test_ctl_space_is_nonblocking(void) {
+static void test_ctl_space_uses_separated_release(void) {
     reset_fixture();
     keyrecord_t release = record(false);
     process_ly_ctl_space(LY_CTL_SPACE, &release);
@@ -97,11 +97,65 @@ static void test_ctl_space_is_nonblocking(void) {
 
     g_now = 49;
     matrix_scan_user();
-    assert(!saw_call("unregister_code16", C(KC_SPC)));
+    assert(call_count == 1);
+    assert(!saw_call("unregister_code", KC_SPC));
+    assert(!saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
 
     g_now = 50;
     matrix_scan_user();
-    assert(saw_call("unregister_code16", C(KC_SPC)));
+    assert(call_count == 2);
+    assert(saw_call("unregister_code", KC_SPC));
+    assert(!saw_call("unregister_code16", C(KC_SPC)));
+    assert(!saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
+
+    g_now = 69;
+    matrix_scan_user();
+    assert(call_count == 2);
+    assert(!saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
+
+    g_now = 70;
+    matrix_scan_user();
+    assert(call_count == 3);
+    assert(saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
+}
+
+static void test_ctl_space_rapid_repeat_keeps_modifier(void) {
+    reset_fixture();
+    keyrecord_t release = record(false);
+    process_ly_ctl_space(LY_CTL_SPACE, &release);
+
+    g_now = 50;
+    matrix_scan_user();
+    assert(call_count == 2);
+
+    g_now = 55;
+    release = record(false);
+    process_ly_ctl_space(LY_CTL_SPACE, &release);
+    assert(call_count == 3);
+
+    g_now = 69;
+    matrix_scan_user();
+    assert(call_count == 3);
+    assert(!saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
+
+    g_now = 104;
+    matrix_scan_user();
+    assert(call_count == 3);
+
+    g_now = 105;
+    matrix_scan_user();
+    assert(call_count == 4);
+    assert(saw_call("unregister_code", KC_SPC));
+    assert(!saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
+
+    g_now = 124;
+    matrix_scan_user();
+    assert(call_count == 4);
+
+    g_now = 125;
+    matrix_scan_user();
+    assert(call_count == 5);
+    assert(saw_call("unregister_weak_mods", MOD_BIT(KC_LCTL)));
 }
 
 static void test_acmd_sp_uses_weak_mods_and_roll_hold(void) {
@@ -206,7 +260,8 @@ static void test_jp_toggle_is_physical_intent(void) {
 }
 
 int main(void) {
-    test_ctl_space_is_nonblocking();
+    test_ctl_space_uses_separated_release();
+    test_ctl_space_rapid_repeat_keeps_modifier();
     test_acmd_sp_uses_weak_mods_and_roll_hold();
     test_custom_tap_hold_uses_dynamic_term();
     test_ly_tgml_roll_is_mouse_hold();
