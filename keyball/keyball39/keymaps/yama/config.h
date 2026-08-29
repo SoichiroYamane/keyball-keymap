@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define TAPPING_TERM 100
 #define HOLD_ON_OTHER_KEY_PRESS
-#define KEYBALL_CPI_DEFAULT 350
+#define KEYBALL_CPI_DEFAULT 300
 #define KEYBALL_SCROLL_DIV_DEFAULT 5
 // https://github.com/Yowkees/keyball/blob/9ffe9f6c9416f9428a49bc69235a35d2d5e1fb30/qmk_firmware/keyboards/keyball/lib/keyball/README.md
 #define KEYBALL_SCROLLSNAP_ENABLE 0
