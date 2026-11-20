@@ -8,9 +8,15 @@
 #include "ly_tgml/ly_tgml.h"
 #include "tmux/tmux.h"
 
-#include "keycode.h"
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+  prepare_ly_ctl_space(keycode, record);
+  return true;
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // Buffered events can emit reports here. Only the pre-hook sees physical
+  // presses in order, so a replay must not cancel a newer queued switch.
+  finish_ly_ctl_space();
   process_acmd_sp(keycode, record);
   process_jp_toggle(keycode, record);
   process_ly_tgml(keycode, record);

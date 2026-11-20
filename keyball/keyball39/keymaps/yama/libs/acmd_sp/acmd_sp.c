@@ -1,4 +1,5 @@
 #include "acmd_sp.h"
+#include "../ly_ctl_space/ly_ctl_space.h"
 #include "../user_keycode.h"
 
 static uint32_t acmd_sp_timer = 0;
@@ -10,6 +11,8 @@ static const uint8_t ACMD_SP_MODS = MOD_BIT(KC_LALT) | MOD_BIT(KC_LGUI);
 
 static void settle_acmd_sp_hold(void) {
   if (!is_acmd_sp_hold_active) {
+    // This hold can settle on a scan tick, outside either keyboard hook.
+    finish_ly_ctl_space();
     register_weak_mods(ACMD_SP_MODS);
     is_acmd_sp_hold_active = true;
   }
