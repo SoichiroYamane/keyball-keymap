@@ -26,8 +26,13 @@
 #define A(keycode) (0x2000u | (keycode))
 #define S(keycode) (0x3000u | (keycode))
 
-#define MOD_BIT(keycode) \
-    ((keycode) == KC_LCTL ? 0x01u : ((keycode) == KC_LALT ? 0x04u : ((keycode) == KC_LGUI ? 0x08u : 0u)))
+#define MOD_BIT(keycode) (1u << ((keycode) - KC_LCTL))
+#define MOD_MASK_CTRL 0x11u
+
+uint8_t has_anykey(void);
+uint8_t get_mods(void);
+uint8_t get_weak_mods(void);
+void add_weak_mods(uint8_t mods);
 
 #define GET_TAPPING_TERM(keycode, record) (g_tapping_term)
 
